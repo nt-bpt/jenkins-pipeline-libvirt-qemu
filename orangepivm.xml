@@ -1,0 +1,42 @@
+<domain type='qemu'>
+  <name>orangepivm</name>
+  <uuid>0eaec08c-61d5-11ef-b638-3b01730b3bb7</uuid>
+  <memory unit='MiB'>16384</memory>
+  <vcpu placement='static'>4</vcpu>
+  <os>
+    <type arch='aarch64' machine='orangepi-pc'>hvm</type>
+    <loader readonly='yes' type='pflash'>/usr/share/qemu-efi-aarch64/QEMU_EFI.fd</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+  <cpu mode='host-passthrough'>
+    <model fallback='forbid'/>
+  </cpu>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <devices>
+    <emulator>/usr/bin/qemu-system-aarch64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source file='/home/jenkins/orangepi5/ubuntu/Orangepi5plus_1.0.8_ubuntu_jammy_server_linux6.1.43.img'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='network'>
+      <mac address='52:54:00:6d:90:02'/>
+      <source network='default'/>
+      <model type='virtio'/>
+    </interface>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <graphics type='vnc' port='-1' autoport='yes' listen='127.0.0.1' />
+  </devices>
+</domain>
