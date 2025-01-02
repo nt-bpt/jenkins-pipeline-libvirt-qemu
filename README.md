@@ -27,3 +27,4 @@ remove the seed image
 ```
 qemu-system-aarch64 -m 2048 -cpu cortex-a76 -smp 2 -M virt -drive if=pflash,format=raw,file=QEMU_EFI-pflash.raw,readonly=on -drive if=pflash,format=raw,file=QEMU_VARS-pflash.raw -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
 ```
+login with username: skytester password: sky360
