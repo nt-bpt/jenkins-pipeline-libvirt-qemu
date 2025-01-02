@@ -1,0 +1,32 @@
+<domain type='qemu'>
+  <name>orangepi</name>
+  <memory unit='MiB'>2048</memory>
+  <vcpu placement='static'>2</vcpu>
+  <os>
+    <type arch='aarch64' machine='virt'>hvm</type>
+    <loader readonly='yes' type='pflash'>/srv/qemu/orangepi5/ubuntu/QEMU_EFI-pflash.raw</loader>
+    <nvram>/srv/qemu/orangepi5/ubuntu/QEMU_VARS-pflash.raw</nvram>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+  <cpu mode='custom' match='exact'>
+    <model fallback='forbid'>cortex-a76</model>
+  </cpu>
+  <devices>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/srv/qemu/orangepi5/ubuntu/sky360base.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='user'>
+      <model type='virtio'/>
+    </interface>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+  </devices>
+</domain>

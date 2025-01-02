@@ -1,10 +1,10 @@
 <domain type='qemu'>
-  <name>orangepivm</name>
-  <uuid>0eaec08c-61d5-11ef-b638-3b01730b3bb7</uuid>
-  <memory unit='MiB'>16384</memory>
+  <name>raspberrypi4b</name>
+  <uuid>12345678-1234-1234-1234-123456789abc</uuid>
+  <memory unit='MiB'>2048</memory>
   <vcpu placement='static'>4</vcpu>
   <os>
-    <type arch='aarch64' machine='orangepi-pc'>hvm</type>
+    <type arch='aarch64' machine='raspi4b'>hvm</type>
     <boot dev='hd'/>
   </os>
   <cpu>
@@ -19,14 +19,13 @@
     <emulator>/usr/bin/qemu-system-aarch64</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw'/>
-      <source file='/home/jenkins/orangepi5/ubuntu/Orangepi5plus_1.0.8_ubuntu_jammy_server_linux6.1.43.img'/>
+      <source file='/home/jenkins/raspberrypi4b/ubuntu/2024-07-04-raspios-bookworm-arm64.img'/>
       <target dev='sda' bus='scsi' />
     </disk>
     <interface type='network'>
-      <mac address='52:54:00:6d:90:02'/>
+      <mac address='52:54:00:6d:90:03'/>
       <source network='default'/>
       <model type='virtio'/>
     </interface>
   </devices>
 </domain>
-
