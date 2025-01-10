@@ -29,7 +29,7 @@ genisoimage -output seed.iso -volid cidata -joliet -rock ubuntu/cloud-init
 wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-arm64.img
 ```
 ```
-qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 seed.img 20G
+qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 boot-disk.img 20G
 ```
 
 ### building the base image with cloud-init
