@@ -35,7 +35,7 @@ qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 seed.img 20
 ### building the base image with cloud-init
 
 ```
-qemu-system-aarch64 -m 2048 -cpu cortex-a76 -smp 2 -M virt -drive if=pflash,format=raw,file=QEMU_EFI-pflash.raw,readonly=on -drive if=pflash,format=raw,file=QEMU_VARS-pflash.raw -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -cdrom seed.iso -boot d -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
+qemu-system-aarch64 -m 2048 -cpu cortex-a76 -smp 2 -M virt -drive if=pflash,format=raw,file=efi.raw,readonly=on -drive if=pflash,format=raw,file=varstore.raw -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -cdrom seed.iso -boot d -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
 ```
 NOTE: If you're on an older version of qemu use '-cpu max' instead of cortex-a76
 
