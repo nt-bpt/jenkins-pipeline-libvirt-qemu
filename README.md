@@ -3,6 +3,22 @@ Simple cloud-init and packer configurations for qemu to setup a base image
 
 Follow these setup to setup qemu-system-aarch64 on ubuntu 22.04 [https://ubuntu.com/server/docs/boot-arm64-virtual-machines-on-qemu](https://ubuntu.com/server/docs/boot-arm64-virtual-machines-on-qemu)
 
+```
+sudo apt install qemu-system-arm
+```
+```
+git clone https://github.com/nt-bpt/jenkins-pipeline-libvirt-qemu.git && cd jenkins-pipeline-libvirt-qemu
+```
+```
+truncate -s 64m varstore.img
+```
+```
+truncate -s 64m efi.img
+```
+```
+dd if=/usr/share/qemu-efi-aarch64/QEMU_EFI.fd of=efi.img conv=notrunc
+```
+
 ### Setting up seed image to configure base image
 ```
 genisoimage -output seed.iso -volid cidata -joliet -rock ubuntu/cloud-init
