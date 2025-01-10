@@ -5,15 +5,15 @@ Follow these setup to setup qemu-system-aarch64 on ubuntu 22.04 [https://ubuntu.
 
 ### Setting up seed image to configure base image
 ```
-genisoimage -output seed.iso -volid cidata -joliet -rock cloud-init
+genisoimage -output seed.iso -volid cidata -joliet -rock ubuntu/cloud-init
 ```
 
 ### Setting up the base image and boot image
 ```
-wget https://cloud-images.ubuntu.com/noble/current/jammy-server-cloudimg-arm64.img
+wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-arm64.img
 ```
 ```
-qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 boot-disk.img 20G
+qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 seed.img 20G
 ```
 
 ### building the base image with cloud-init
@@ -21,10 +21,25 @@ qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 boot-disk.i
 ```
 qemu-system-aarch64 -m 2048 -cpu cortex-a76 -smp 2 -M virt -drive if=pflash,format=raw,file=QEMU_EFI-pflash.raw,readonly=on -drive if=pflash,format=raw,file=QEMU_VARS-pflash.raw -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -cdrom seed.iso -boot d -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
 ```
+NOTE: If you're on an older version of qemu use '-cpu max' instead of cortex-a76
 
 ### starting after cloud-init is finished
-remove the seed image
+remove the seed image drive after initial startup. 
 ```
 qemu-system-aarch64 -m 2048 -cpu cortex-a76 -smp 2 -M virt -drive if=pflash,format=raw,file=QEMU_EFI-pflash.raw,readonly=on -drive if=pflash,format=raw,file=QEMU_VARS-pflash.raw -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
 ```
 login with username: skytester password: sky360
+
+Disable cloud-init startup
+[https://cloudinit.readthedocs.io/en/latest/howto/disable_cloud_init.html#method-1-text-file](https://cloudinit.readthedocs.io/en/latest/howto/disable_cloud_init.html#method-1-text-file)
+
+set the following inside the image
+```
+touch /etc/cloud/cloud-init.disabled
+```
+
+### Write to a flash sd
+covert the image to a raw format
+```
+qemu-img convert -f qcow2 boot-disk.qcow2 -f raw sddisk.img
+```
