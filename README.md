@@ -1,4 +1,6 @@
 # jenkins-pipeline-libvirt-qemu
+
+## Building base image
 Simple cloud-init and packer configurations for qemu to setup a base image
 
 Follow these setup to setup qemu-system-aarch64 on ubuntu 22.04 [https://ubuntu.com/server/docs/boot-arm64-virtual-machines-on-qemu](https://ubuntu.com/server/docs/boot-arm64-virtual-machines-on-qemu)
@@ -12,6 +14,8 @@ git clone https://github.com/nt-bpt/jenkins-pipeline-libvirt-qemu.git && cd jenk
 ```
 truncate -s 64m varstore.img
 ```
+NOTE: if you create a new disk image you'll want to delete the prior varstore.img and create a new varstore.img
+
 ```
 truncate -s 64m efi.img
 ```
@@ -26,38 +30,46 @@ genisoimage -output seed.iso -volid cidata -joliet -rock ubuntu/cloud-init
 
 ### Setting up the base image and boot image
 ```
-wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-arm64.img
+wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-arm64.img
 ```
 ```
-qemu-img create -f qcow2 -b jammy-server-cloudimg-arm64.img -F qcow2 boot-disk.img 20G
+qemu-img create -f qcow2 -b noble-server-cloudimg-arm64.img -F qcow2 boot-disk.img 8G
 ```
 
 ### building the base image with cloud-init
 
 ```
-qemu-system-aarch64 -m 2048 -cpu max -smp 2 -M virt -drive if=pflash,format=raw,file=efi.img,readonly=on -drive if=pflash,format=raw,file=varstore.img -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -cdrom seed.iso -boot d -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
+qemu-system-aarch64 -m 8G -cpu max -smp 2 -M virt -drive if=pflash,format=raw,file=efi.img,readonly=on -drive if=pflash,format=raw,file=varstore.img -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -cdrom seed.iso -boot d -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
 ```
 NOTE: If you're on a recent version of qemu use '-cpu cortex-a76' instead of max
+To view output of the image you may have to select View>serial0 from the qmeu-monitor
 
 ### starting after cloud-init is finished
 remove the seed image drive after initial startup. 
 ```
-qemu-system-aarch64 -m 2048 -cpu max -smp 2 -M virt -drive if=pflash,format=raw,file=efi.img,readonly=on -drive if=pflash,format=raw,file=varstore.img -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
+qemu-system-aarch64 -m 8G -cpu max -smp 2 -M virt -drive if=pflash,format=raw,file=efi.img,readonly=on -drive if=pflash,format=raw,file=varstore.img -drive if=none,file=boot-disk.img,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -netdev type=user,id=net0 -device virtio-net-device,netdev=net0
 ```
-NOTE: If you're on a recent version of qemu use '-cpu cortex-a76' instead of max
+NOTE: If you're on a recent version of qemu use '-cpu cortex-a76' instead of max. You may need to limit memory if you switch to cortex-a76
 
 login with username: skytester password: sky360
 
 Disable cloud-init startup
 [https://cloudinit.readthedocs.io/en/latest/howto/disable_cloud_init.html#method-1-text-file](https://cloudinit.readthedocs.io/en/latest/howto/disable_cloud_init.html#method-1-text-file)
 
-set the following inside the image
+set the following inside the image 
 ```
 touch /etc/cloud/cloud-init.disabled
+```
+NOTE: This is already part of cloud-init user-data so it shouldn't be needed.
+
+### Convert the image to raw format
+```
+qemu-img rebase -b "" boot-disk.img
 ```
 
 ### Write to a flash sd
 covert the image to a raw format
+
 ```
-qemu-img convert -f qcow2 boot-disk.qcow2 -f raw sddisk.img
+qemu-img convert -O raw boot-disk.img sddisk.img 
 ```

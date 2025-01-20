@@ -5,23 +5,10 @@ package_update: true
 package_upgrade: true
 packages:
   - ufw
-  - uuid
-  - pipx
   - net-tools
-  - python3-pip
-  - pix
-  - libgpgme-dev
   - cmake
   - build-essential
-  - zlib1g-dev
-  - libncurses5-dev
-  - libgdbm-dev
-  - libnss3-dev
-  - libssl-dev
-  - libreadline-dev
-  - libffi-dev
-  - libntirpc-dev
-  - wget
+  - python3
 
 users:
   - name: skytester
@@ -459,3 +446,6 @@ runcmd:
   - chgrp -R skytester /opt/sky360/.venv
   - sudo -u skytester -i bash -c 'source /opt/sky360/.venv/bin/activate && python3 -m pip install -r /opt/sky360/python3.10.requirements.txt'
   - touch /etc/cloud/cloud-init.disabled
+  - mkdir /boot/dtb && cp /lib/firmware/*generic/device-tree/rockchip/rk3588-orangepi-5-plus.dtb /boot/dtb/
+  - cp /lib/firmware/*generic/device-tree/rockchip/rk3588-orangepi-5-plus.dtb /boot/efi/EFI/BOOT/
+  - efibootmgr -c -d /dev/vda15 -p 1 -L "EFIBOOT" -l '\EFI\BOOT\BOOTAA64.EFI' -u "dtb=/EFI/BOOT/rk3588-orangepi-5-plus.dtb"
