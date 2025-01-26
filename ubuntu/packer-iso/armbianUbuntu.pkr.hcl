@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    qemu {
+      version = ">= 1.1.0"
+      source  = "github.com/hashicorp/qemu"
+    }
+  }
+}
+
 variable "iso_url" {
   default = "https://dl.armbian.com/orangepi5-plus/Noble_vendor_server-kisak"
 }
@@ -27,6 +36,7 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
     "<f6><esc><wait>",
     "console=ttyS0,115200n8 root=/dev/vda1<enter>"
   ]
+  qemu_binary = "qemu-system-aarch64"
   qemuargs = [
     ["-m", "8G"],
     ["-cpu", "max"],
