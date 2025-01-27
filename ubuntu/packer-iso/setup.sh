@@ -8,8 +8,8 @@ shasum -a 256 -c img.xz.sha
 unxz Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz
 
 sudo mkdir image
-OFFSET=$(fdisk -l Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz | grep '^Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz' | awk '{print $2 * 512}')
-sudo mount -o loop,offset=$OFFSET Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz image
+OFFSET=$(fdisk -l Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img | grep '^Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img' | awk '{print $2 * 512}')
+sudo mount -o loop,offset=$OFFSET Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img image
 
 sudo cp image/boot/vmlinuz kernel.img
 sudo cp image/boot/initrd.img initrd.img
