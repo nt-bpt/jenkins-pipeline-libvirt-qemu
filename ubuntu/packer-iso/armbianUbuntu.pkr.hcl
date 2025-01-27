@@ -1,19 +1,12 @@
 packer {
   required_plugins {
-    qemu {
+    qemu = {
       version = ">= 1.1.0"
       source  = "github.com/hashicorp/qemu"
     }
   }
 }
 
-variable "iso_url" {
-  default = "https://dl.armbian.com/orangepi5-plus/Noble_vendor_server-kisak"
-}
-
-variable "iso_checksum" {
-  default = "908cfea539b6449a932582a03c5ccc2af6561c5625fc9c5b88fc320e07dd7c63"
-}
 
 variable "local_image_path" {
   default = "Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz"
@@ -21,7 +14,8 @@ variable "local_image_path" {
 
 source "qemu" "armbian-ubuntu-noble-arm64" {
   iso_url            = var.local_image_path
-  iso_checksum       = var.iso_checksum
+  iso_checksum       = "none"
+  disk_image         = "true"
   output_directory   = "armbian-ubuntu-noble-arm64"
   vm_name            = "armbian-ubuntu-noble-arm64"
   disk_size          = "10000"
@@ -56,7 +50,7 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
 }
 
 build {
-  sources = ["source.qemu.armbian-arm64"]
+  sources = ["source.qemu.armbian-ubuntu-noble-arm64"]
   
   provisioner "shell" {
     inline = [
