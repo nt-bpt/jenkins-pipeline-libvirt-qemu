@@ -16,7 +16,7 @@ variable "iso_checksum" {
 }
 
 variable "local_image_path" {
-  default = "Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img"
+  default = "Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz"
 }
 
 source "qemu" "armbian-ubuntu-noble-arm64" {
