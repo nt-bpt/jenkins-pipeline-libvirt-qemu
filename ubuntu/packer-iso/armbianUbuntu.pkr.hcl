@@ -9,7 +9,7 @@ packer {
 
 
 variable "local_image_path" {
-  default = "Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz"
+  default = "Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz"
 }
 
 source "qemu" "armbian-ubuntu-noble-arm64" {
@@ -28,9 +28,16 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
   ssh_pty            = true
   boot_wait          = "10s"
   boot_command       = [
+    "${ssh_password}<enter><wait>",
+    "${ssh_password}<enter><wait>",
+    "1<enter><wait>",
+    "skytester<enter><wait>",
+    "${ssh_password}<enter><wait>",
+    "${ssh_password}<enter><wait><wait><wait><wait>",
     "<enter><wait>",
-    "<f6><esc><wait>",
-    "console=ttyS0,115200n8 root=/dev/vda1<enter>"
+    "<enter><wait>",
+    "2<enter><wait><wait><wait><wait>",
+    "<ctrL+d><wait>",
   ]
   qemu_binary = "qemu-system-aarch64"
   qemuargs = [
