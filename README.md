@@ -1,7 +1,8 @@
 # Armbian Ubuntu with Packer
 
 ```bash
-cd packer && packer init armbianUbuntu.pkr.hcl
+cd ubuntu/packer-iso && packer init armbianUbuntu.pkr.hcl
+./setup.sh
 packer build armbianUbuntu.pkr.hcl
 ```
 

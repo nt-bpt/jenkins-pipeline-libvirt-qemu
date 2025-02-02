@@ -1,6 +1,6 @@
 #!/bin/bash
 echo 'Downloading the ISO image...'
-wget https://dl.armbian.com/orangepi5-plus/Noble_vendor_server-kisak -O Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz
+wget https://dl.armbian.com/orangepi5-plus/Noble_current_server-kisak -O Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz
 
 echo 'Checking the SHA256 checksum...'
 shasum -a 256 -c img.xz.sha
