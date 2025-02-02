@@ -12,6 +12,14 @@ variable "local_image_path" {
   default = "Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz"
 }
 
+variable "default_username" {
+  default = "skytester"
+}
+
+variable "default_password" {
+  default = "9wrA3D3vtjRtL"
+}
+
 source "qemu" "armbian-ubuntu-noble-arm64" {
   iso_url            = var.local_image_path
   iso_checksum       = "none"
@@ -22,22 +30,14 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
   format             = "qcow2"
   headless           = true
   http_directory     = "http"
-  ssh_username       = "skytester"
-  ssh_password       = "sky360"
+  ssh_username       = var.default_username
+  ssh_password       = var.default_password
   ssh_wait_timeout   = "30m"
   ssh_pty            = true
   boot_wait          = "10s"
   boot_command       = [
-    "${ssh_password}<enter><wait>",
-    "${ssh_password}<enter><wait>",
-    "1<enter><wait>",
-    "skytester<enter><wait>",
-    "${ssh_password}<enter><wait>",
-    "${ssh_password}<enter><wait><wait><wait><wait>",
-    "<enter><wait>",
-    "<enter><wait>",
-    "2<enter><wait><wait><wait><wait>",
-    "<ctrL+d><wait>",
+    "<wait60>root<enter><wait5>",
+    "${var.default_password}<enter><wait60>",
   ]
   qemu_binary = "qemu-system-aarch64"
   qemuargs = [
