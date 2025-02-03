@@ -9,7 +9,7 @@ packer {
 
 
 variable "local_image_path" {
-  default = "Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz"
+  default = "Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img"
 }
 
 variable "default_username" {
@@ -32,12 +32,12 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
   http_directory     = "http"
   ssh_username       = var.default_username
   ssh_password       = var.default_password
-  ssh_wait_timeout   = "30m"
+  ssh_wait_timeout   = "15m"
   ssh_pty            = true
-  boot_wait          = "10s"
+  boot_wait          = "300s"
   boot_command       = [
     "<wait60>root<enter><wait5>",
-    "${var.default_password}<enter><wait60>",
+    "${var.default_password}<enter><wait120>",
   ]
   qemu_binary = "qemu-system-aarch64"
   qemuargs = [
@@ -49,10 +49,6 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
     ["-initrd", "initrd.img"],
     ["-drive", "if=none,file=${var.local_image_path},format=raw,id=hd0"],
     ["-append", "earlyprintk loglevel=8 root=/dev/vda1"],
-    ["-device", "virtio-blk-device,drive=hd0"],
-    ["-netdev", "user,id=net0"],
-    ["-device", "virtio-net-device,netdev=net0"],
-    ["-serial", "mon:stdio"]
   ]
 }
 
