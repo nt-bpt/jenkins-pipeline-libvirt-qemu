@@ -44,7 +44,7 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
     ["-m", "8G"],
     ["-cpu", "max"],
     ["-smp", "2"],
-    ["-M", "virt"],
+    ["-machine", "virt"],
     ["-kernel", "kernel.img"],
     ["-initrd", "initrd.img"],
     ["-drive", "if=none,file=${var.local_image_path},format=raw,id=hd0"],
