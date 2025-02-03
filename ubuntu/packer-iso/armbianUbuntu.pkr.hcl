@@ -34,7 +34,7 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
   ssh_password       = var.default_password
   ssh_wait_timeout   = "15m"
   ssh_pty            = true
-  boot_wait          = "300s"
+  boot_wait          = "600s"
   boot_command       = [
     "<wait60>root<enter><wait5>",
     "${var.default_password}<enter><wait120>",
@@ -47,7 +47,6 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
     ["-machine", "virt"],
     ["-kernel", "kernel.img"],
     ["-initrd", "initrd.img"],
-    ["-drive", "if=none,file=${var.local_image_path},format=raw,id=hd0"],
     ["-append", "earlyprintk loglevel=8 root=/dev/vda1"],
   ]
 }
