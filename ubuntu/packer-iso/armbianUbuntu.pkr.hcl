@@ -13,7 +13,7 @@ variable "local_image_path" {
 }
 
 variable "default_username" {
-  default = "skytester"
+  default = "root"
 }
 
 variable "default_password" {
@@ -37,7 +37,7 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
   boot_wait          = "600s"
   boot_command       = [
     "<wait60>root<enter><wait5>",
-    "${var.default_password}<enter><wait120>",
+    "${var.default_password}<enter><wait240>",
   ]
   qemu_binary = "qemu-system-aarch64"
   qemuargs = [
@@ -48,6 +48,7 @@ source "qemu" "armbian-ubuntu-noble-arm64" {
     ["-kernel", "kernel.img"],
     ["-initrd", "initrd.img"],
     ["-append", "earlyprintk loglevel=8 root=/dev/vda1"],
+    ["-monitor", "none"],
   ]
 }
 
@@ -75,6 +76,7 @@ build {
       "sudo chown -R skytester /opt/sky360/.venv",
       "sudo chgrp -R skytester /opt/sky360",
       "sudo chgrp -R skytester /opt/sky360/.venv",
+      "su skytester",
       "source /opt/sky360/.venv/bin/activate && python3 -m pip install -r /opt/sky360/requirements.txt",
     ]
   }
