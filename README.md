@@ -43,6 +43,7 @@ Run the following commands. The setup.sh script will ask for your su login since
 ```bash
 cd ubuntu/packer-iso && packer init armbianUbuntu.pkr.hcl
 ./setup.sh
+packer init armbianUbuntu.pkr.hcl
 packer build armbianUbuntu.pkr.hcl
 ```
 The build process could take several hours depending on your system. If you want to monitor the build process you can use vnc to watch the initial boot commands. Watch the packer build process output for the vnc port. If you're running this on a remote machine you'll need to bind vnc to 0.0.0.0 . You can do this by adding the following setting to the source configuration for armbian-ubuntu-noble-arm64 in armbianUbuntu.pkr.hcl
@@ -51,7 +52,7 @@ The build process could take several hours depending on your system. If you want
 vnc_bind_address   = "0.0.0.0" 
 ```
 
-If there is an issue with the build enable logging
+If there is an issue with the build enable logging. The build process will use vnc to run the boot commands. This executes the initial Armbian setup to configure the system. After vnc ssh is used to execute the provision.sh script. If you need to troubleshoot problems with software being installed edit the provision.sh script.
 ```bash
 export PAKCER_LOG=1
 export PAKCER_LOG_PATH="packer.log"
@@ -64,4 +65,5 @@ When the build is complete you'll need to convert your image back to a format th
 qemu-img convert -O raw armbian-ubuntu-noble-arm64/armbian-ubuntu-noble-arm64 sddisk.img 
 ```
 
-
+Use the armbian installer to select where to install it after booting on the Orange Pi 5 plus sd card.
+[https://docs.armbian.com/User-Guide_Getting-Started/#boot-loader](https://docs.armbian.com/User-Guide_Getting-Started/#boot-loader)
