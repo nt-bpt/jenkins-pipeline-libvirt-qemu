@@ -45,11 +45,16 @@ cd ubuntu/packer-iso && packer init armbianUbuntu.pkr.hcl
 ./setup.sh
 packer build armbianUbuntu.pkr.hcl
 ```
-
 The build process could take several hours depending on your system. If you want to monitor the build process you can use vnc to watch the initial boot commands. Watch the packer build process output for the vnc port. If you're running this on a remote machine you'll need to bind vnc to 0.0.0.0 . You can do this by adding the following setting to the source configuration for armbian-ubuntu-noble-arm64 in armbianUbuntu.pkr.hcl
 
 ```bash
 vnc_bind_address   = "0.0.0.0" 
+```
+
+If there is an issue with the build enable logging
+```bash
+export PAKCER_LOG=1
+export PAKCER_LOG_PATH="packer.log"
 ```
 
 When the build is complete you'll need to convert your image back to a format that can be burned onto an sdcard.
@@ -58,4 +63,5 @@ When the build is complete you'll need to convert your image back to a format th
 ```bash
 qemu-img convert -O raw armbian-ubuntu-noble-arm64/armbian-ubuntu-noble-arm64 sddisk.img 
 ```
+
 

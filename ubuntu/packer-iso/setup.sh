@@ -1,19 +1,19 @@
 #!/bin/bash
 echo 'Downloading the ISO image...'
-wget https://dl.armbian.com/orangepi5-plus/Noble_current_server-kisak -O Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz
+wget https://dl.armbian.com/orangepi5-plus/Noble_vendor_server-kisak -O Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz
 
 echo 'Checking the SHA256 checksum...'
 shasum -a 256 -c img.xz.sha
 echo 'unxz the image...'
-unxz Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img.xz
+unxz Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img.xz
 
 echo 'Mounting the image...'
 sudo mkdir image
 echo 'Calculating the offset...'
-OFFSET=$(fdisk -l Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img | grep '^Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img' | awk '{print $2 * 512}')
+OFFSET=$(fdisk -l Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img | grep '^Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img' | awk '{print $2 * 512}')
 echo 'Offset is' $OFFSET
 echo 'Mounting the image...'
-sudo mount -o loop,offset=$OFFSET Armbian_24.11.2_Orangepi5-plus_noble_current_6.12.0-kisak.img image
+sudo mount -o loop,offset=$OFFSET Armbian_24.11.2_Orangepi5-plus_noble_vendor_6.1.75-kisak.img image
 
 echo 'Copying the kernel and initrd...'
 sudo cp image/boot/vmlinuz kernel.img
