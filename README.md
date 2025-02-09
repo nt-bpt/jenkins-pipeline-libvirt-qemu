@@ -38,7 +38,7 @@ sudo chmod 400 ~/.ssh/config
 ```
 
 ### Building the image
-Run the following commands. The setup.sh script will ask for your su login since it needs to mount a loopback device to modify the image before we will run it. We will also extract the kernel and initrd images from /boot to be used with the qemu command.
+Run the following commands. The setup.sh script will ask for your su login since it needs to mount a loopback device to modify the image before we will run it. We will also extract the kernel and initrd images from /boot to be used with the qemu command. The setup script extracts the mainline kernel/initrd from the Armbian current image so that qemu will run correctly. The setup script also downloads the vendor kernel, the vendor kernel is the base image packer will use. 
 
 ```bash
 cd ubuntu/packer-iso && packer init armbianUbuntu.pkr.hcl
